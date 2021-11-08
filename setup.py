@@ -7,7 +7,7 @@ setup_requirements = []
 
 setup(
     author="Genomics and Machine Learning lab",
-    author_email="duy.pham@uq.edu.au",
+    author_email="uqmtra12@uq.edu.au",
     python_requires=">=3.5",
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
@@ -20,10 +20,10 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
     ],
-    description="A downstream analysis toolkit for Spatial Transcriptomic data",
+    description="Spatial TRanscriptomic In Situ Hybridization (STRISH)",
     entry_points={
         "console_scripts": [
-            "stlearn=stlearn.cli:main",
+            "stlmain",
         ],
     },
     install_requires=requirements,
@@ -35,6 +35,6 @@ setup(
     packages=find_packages(include=["STRISH", "STRISH.*"]),
     setup_requires=setup_requirements,
     url="https://github.com/BiomedicalMachineLearning/STRISH",
-    version="0.3.2",
+    version="0.1",
     zip_safe=False,
 )
