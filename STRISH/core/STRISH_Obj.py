@@ -1,5 +1,9 @@
 from anndata import AnnData
-
+from typing import Optional, Union, Mapping
+from typing import Iterable, Sequence
+from shapely.geometry import MultiPoint, Point, Polygon
+import pandas as pd
+import numpy as np
 class STRISH_Obj(AnnData):
     
     def __init__(
@@ -52,8 +56,7 @@ class STRISH_Obj(AnnData):
 #                 else:
 #                     descr += f"\n {attribute}: {type(getattr(self, attribute))}"
         return descr
-    
-    
+
     def __repr__(self):
         """Function to return representation of the object"""
         if self.is_view:
@@ -63,7 +66,7 @@ class STRISH_Obj(AnnData):
         
     def __getitem__(self, index) -> 'STRISH_Obj':
         """Function to return the slice of the original object while keeping the other attribute accordingly
-        Overide from Anndata
+        Override from Anndata
         """
         oidx, vidx = self._normalize_indices(index)
         tmp = AnnData(self, oidx=oidx, vidx=vidx, asview=True)
@@ -76,14 +79,12 @@ class STRISH_Obj(AnnData):
         # pour the important data back to the object and create a new STRISH_Obj
         strish_item = STRISH_Obj(data.to_df(), observe_df, ref_image=self.ref_image, polygon=cached_polygon, is_view=False)
         return strish_item
-    
-    
+
     def copy(self) -> "STRISH_Obj":
         """Full copy, optionally on disk."""
         """Overide Anndata's copy function to return the proper STRISH_Obj"""
         return STRISH_Obj(self.to_df(), self.obs, ref_image=self.ref_image, polygon=self.polygon, is_view=False)
-    
-    
+
     # Additional parameter to fit in the new object
     @property
     def polygon(self): 
@@ -98,8 +99,7 @@ class STRISH_Obj(AnnData):
     @contours.setter
     def contours(self, value:np.ndarray):
         self.contours = value
-    
-    
+
     @property
     def ref_image(self):
         """stores the image that will be used as the reference of analysis and plot the result"""
@@ -134,4 +134,4 @@ class STRISH_Obj(AnnData):
     
     @heat_colors.setter
     def heat_colors(self, value):
-        self.heat_colors = values
+        self.heat_colors = value
