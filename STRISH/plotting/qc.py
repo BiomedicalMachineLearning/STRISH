@@ -16,9 +16,9 @@ def plot_expression_histogram(
 ):
         """ Visualization of the expression of every existing marker accross all the cell """
         if isinstance(figsize, tuple) and len(figsize) == 2:
-            strish_object.to_df().hist(column=self.to_df().columns, bins=50, figsize=figsize)
+            strish_object.to_df().hist(column=strish_object.to_df().columns, bins=50, figsize=figsize)
         elif isinstance(figsize, int):
-            strish_object.to_df().hist(column=self.to_df().columns, bins=50, figsize=(figsize, figsize))
+            strish_object.to_df().hist(column=strish_object.to_df().columns, bins=50, figsize=(figsize, figsize))
         else:
             raise Exception(f'figsize is invalid {type(figsize)}, only support int or tuple format')
         if save_fn:

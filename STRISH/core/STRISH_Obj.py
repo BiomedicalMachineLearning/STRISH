@@ -3,6 +3,7 @@ from typing import Optional, Union, Mapping
 from typing import Iterable, Sequence
 from shapely.geometry import MultiPoint, Point, Polygon
 import pandas as pd
+import re
 import numpy as np
 class STRISH_Obj(AnnData):
     

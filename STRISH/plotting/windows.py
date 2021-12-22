@@ -10,6 +10,7 @@ from ..core import STRISH_Obj
 from ..utils import *
 import matplotlib.ticker as plticker
 import cv2
+import logging
 
 def plot_scanned_windows(
     strish_object:STRISH_Obj, 
@@ -18,12 +19,12 @@ def plot_scanned_windows(
     inteval=256, 
     save_fn:Optional[str]=None
 ):
-    if hasattr(self, 'all_rects'):
+    if hasattr(strish_object, 'all_rects'):
         all_rects_over_image = draw_rectangles(strish_object.ref_image, strish_object.all_rects, thickness=box_thickness)
     else:
         all_rects = list()
         areas = list()
-        for box in self.obs['Colocal_window'].unique():
+        for box in strish_object.obs['Colocal_window'].unique():
             if isinstance(box, str): #(isinstance(box, float) and not np.isnan(box)):
                 int_box = [int(i) for i in box.split(',')]
                 all_rects.append(int_box)

@@ -4,8 +4,11 @@ from typing import Tuple  # Classes
 import pandas as pd
 import numpy as np
 from pathlib import Path
+import logging
 from ..core import STRISH_Obj
 from ..utils import *
+import matplotlib.patches as mpatches
+import matplotlib.pyplot as plt
 
 def plot_cell_spatial_scatter(strish_obj:STRISH_Obj , X_col:Optional[str]=None, Y_col:Optional[str]=None, 
                                   label:Optional[str]=None, spot_size:Optional[float]=0.75, 
@@ -13,7 +16,7 @@ def plot_cell_spatial_scatter(strish_obj:STRISH_Obj , X_col:Optional[str]=None, 
                                   legend_log=2,rasterize:Optional[bool]=True, save_fn:Optional[str]=None):
     """ plot the cell distribution in the spatial context """
     if 'X_px' not in list(strish_obj.obs.columns) and 'Y_px' not in list(strish_obj.obs.columns):
-        logging.exception(f'Not consistent unit original_coord_unit is in {self.original_coord_unit} and ref_image_unit is in {self.ref_image_unit}')
+        logging.exception(f'Not consistent unit original_coord_unit is in {strish_obj.original_coord_unit} and ref_image_unit is in {strish_obj.ref_image_unit}')
         raise Exception('Please run convert_unit_micron2pixel')
 
     ox_coord = strish_obj.obs['X_px']
@@ -30,7 +33,7 @@ def plot_cell_spatial_scatter(strish_obj:STRISH_Obj , X_col:Optional[str]=None, 
                     legend_patches.append(tmp_patch)
 
         else:
-            ax_color_mapper = sns.color_palette("tab20",  len(set(self.obs[label].values)))
+            ax_color_mapper = sns.color_palette("tab20",  len(set(strish_obj.obs[label].values)))
             custom_mapper = dict()
             for index, color in enumerate(ax_color_mapper):
                 custom_mapper[list(set(strish_obj.obs[label].values))[index]] = color
