@@ -3,7 +3,7 @@ import cv2
 import os
 import seaborn as sns
 from PIL import Image
-
+import glob
 
 def get_files_in_directory(directory, postfix=""):
     """ list all the files with postfix in the directory and return the sorted list """
