@@ -1,12 +1,15 @@
 from anndata import AnnData
 from typing import Optional, Union, Mapping
-from typing import Iterable, Sequence
-from shapely.geometry import MultiPoint, Point, Polygon
+from typing import Sequence
+from shapely.geometry import Polygon
 import pandas as pd
 import re
 import numpy as np
+import logging
+from PIL import Image
+
+
 class STRISH_Obj(AnnData):
-    
     def __init__(
         self, 
         cnt_matrix: pd.DataFrame, 
@@ -22,9 +25,9 @@ class STRISH_Obj(AnnData):
         for col in meta_vars.columns: 
             if re.match(r'^Centroid\s+(.*)', col):
                 if 'X' in col:
-                    self.__centroid_X = col
+                    self.centroid_X = col
                 if 'Y' in col:
-                    self.__centroid_Y = col
+                    self.centroid_Y = col
                 self._original_coord_unit = re.sub('^[X|Y]+\s', '' ,re.findall(r'^Centroid\s+(.*)', col)[0])
         self._ref_image_unit = 'px'
 
@@ -92,14 +95,14 @@ class STRISH_Obj(AnnData):
         """A Dataframe stores the metadata of the cells including coordination, cell type, tissue id etc"""
         return self._polygon
     
-    @property
-    def contours(self): 
-        """A Dataframe stores the metadata of the cells including coordination, cell type, tissue id etc"""
-        return self.contours
+    # @property
+    # def contours(self):
+    #     """A Dataframe stores the metadata of the cells including coordination, cell type, tissue id etc"""
+    #     return self.contours
     
-    @contours.setter
-    def contours(self, value:np.ndarray):
-        self.contours = value
+    # @contours.setter
+    # def contours(self, value:np.ndarray):
+    #     self.contours = value
 
     @property
     def ref_image(self):
@@ -136,3 +139,5 @@ class STRISH_Obj(AnnData):
     @heat_colors.setter
     def heat_colors(self, value):
         self.heat_colors = value
+
+
