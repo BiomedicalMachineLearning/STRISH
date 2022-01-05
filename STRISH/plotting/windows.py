@@ -12,6 +12,7 @@ import matplotlib.ticker as plticker
 import cv2
 import logging
 
+
 def plot_scanned_windows(
     strish_object:STRISH_Obj, 
     box_thickness=5, 
@@ -123,7 +124,7 @@ def plot_colocalized_heatmap(
     tempt_img = np.zeros_like(strish_object.ref_image)
     colocalised_heatmap = draw_rectangles_heat(tempt_img, strish_object.all_score_rects, strish_object.heat_colors)
     fig, ax = plt.subplots(dpi=dpi)
-    scores_range =  np.array(strish_object.box_scores)
+    scores_range = np.array(strish_object.box_scores)
     map_color = ax.imshow(colocalised_heatmap, vmax=scores_range.max(), vmin=scores_range.min())
     fig.colorbar(map_color, orientation=orientation)
     if show_contour:

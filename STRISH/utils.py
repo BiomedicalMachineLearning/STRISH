@@ -4,6 +4,8 @@ import os
 import seaborn as sns
 from PIL import Image
 import glob
+import io
+
 
 def get_files_in_directory(directory, postfix=""):
     """ list all the files with postfix in the directory and return the sorted list """
@@ -18,13 +20,14 @@ def get_files_in_dir_recursively(directory, postfix='json'):
     files = [file for file in glob.glob(os.path.join(directory, '**/*.{0}'.format(postfix)), recursive=True)]
     return files
 
+
 def get_subdirectories_in_directory(directory, postfix=""):
     """ list all the subdirectories in the directory """
     dir_names = [s for s in os.listdir(directory) if os.path.isdir(os.path.join(directory, s))]
     return sorted(dir_names)
 
 
-def overlay_pil_imgs(foreground, background, best_loc = (0,0), alpha=0.5):
+def overlay_pil_imgs(foreground, background, best_loc=(0, 0), alpha=0.5):
     """ overlay two images to visualize the registration """
     newimg1 = Image.new('RGBA', size=background.size, color=(0, 0, 0, 0))
     newimg1.paste(foreground, best_loc)
@@ -35,6 +38,7 @@ def overlay_pil_imgs(foreground, background, best_loc = (0,0), alpha=0.5):
     newimg2.paste(foreground, best_loc)
     result = Image.blend(newimg1, newimg2, alpha=alpha)
     return result
+
 
 def mkdirs(dirs):
     """ create new directory  if it does not exist"""
@@ -48,7 +52,8 @@ def convert_micron2pixel(x_micron, micron_dim, scale_dim):
     ox_px_coord = convert_micron2pixel(ox_coords, 6276.93, im_demo.shape[1])
     oy_px_coord = convert_micron2pixel(oy_coords, 15235.53, im_demo.shape[0])
     """
-    return (x_micron*scale_dim/micron_dim)
+    return x_micron*scale_dim/micron_dim
+
 
 def add_detection_boxes(list_annots, current_ox, current_oy, 
                         current_width, current_height, 
@@ -74,6 +79,7 @@ def add_detection_boxes(list_annots, current_ox, current_oy,
                         stride_y+current_oy+sub_annot_height]
             list_annots.append(tmp_rect)
 
+
 def map_heat_values2colors(values, color_palette='viridis'):
     """
     Map and convert the co-localization scores to colors range 
@@ -87,10 +93,12 @@ def map_heat_values2colors(values, color_palette='viridis'):
         raw_color = heat_colors_range[set_box_scores.index(value)]
         colors.append(raw_color)
     return np.array(colors)
-    
+
+
 def list_to_int(list1D):
     """ convert list of float values to integer values """
     return [int(float(x)) for x in list1D]
+
 
 def draw_rectangles(img, rects, color=(0, 255, 255), thickness=7):
     """ draw rectangles to a cv2 img 
@@ -108,6 +116,7 @@ def draw_rectangles(img, rects, color=(0, 255, 255), thickness=7):
         cv2.rectangle(clone_image, pt1, pt2, color, thickness, cv2.FILLED)
     return clone_image
 
+
 def draw_rectangles_heat(img, rects:dict, colors:list, thickness=0):
     """
     Plot the spatial heatmap of cell colocalization score
@@ -121,3 +130,27 @@ def draw_rectangles_heat(img, rects:dict, colors:list, thickness=0):
         pt2 = np.array(list_to_int(rect[2:]))
         cv2.rectangle(clone_image, tuple(pt1-thickness), tuple(pt2+thickness), colors[index], cv2.FILLED)
     return clone_image
+
+
+def extract_physical_dimension(ome_tiff_path):
+        """ A function to load the original OME tiff to extract micron resolution and pixel conversion"""
+        """ return two dictionaries: one for unit conversion and the other for channel2name"""
+        import tifffile
+        import xml.etree.ElementTree
+        tiff_image = tifffile.TiffFile(ome_tiff_path)
+        omexml_string = tiff_image.pages[0].description
+        root = xml.etree.ElementTree.parse(io.StringIO(omexml_string))
+        namespaces = {'ome': 'http://www.openmicroscopy.org/Schemas/OME/2016-06'}
+        channels = root.findall('ome:Image[1]/ome:Pixels/ome:Channel', namespaces)
+        channel_names = [c.attrib['Name'] for c in channels]
+        resolution = root.findall('ome:Image[1]/ome:Pixels', namespaces)
+        attribute = resolution[0]
+
+        resolution_unit = dict()
+        resolution_unit['original_X_micron'] = float(attribute.attrib['SizeX']) * float(
+            attribute.attrib['PhysicalSizeX'])
+        resolution_unit['original_Y_micron'] = float(attribute.attrib['SizeY']) * float(
+            attribute.attrib['PhysicalSizeY'])
+        resolution_unit['original_X_pixel'] = int(attribute.attrib['SizeX'])
+        resolution_unit['original_Y_pixel'] = int(attribute.attrib['SizeY'])
+        return resolution_unit, channel_names
