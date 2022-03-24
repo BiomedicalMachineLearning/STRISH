@@ -11,7 +11,7 @@ from ..utils import *
 import matplotlib.ticker as plticker
 import cv2
 import logging
-
+from skimage import measure
 
 def plot_scanned_windows(
     strish_object:STRISH_Obj, 
@@ -61,7 +61,7 @@ def plot_tissue_window_contour(
     if 'Colocal_window' not in getattr(strish_object, 'obs').keys() :
         logging.exception(f' Colocal_window is missing')
         raise Exception('Please run scan_cell_locs_by_window')
-    from skimage import measure
+
 
     contour_rects = list()
     dummy_score = list()
