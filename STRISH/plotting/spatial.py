@@ -11,7 +11,7 @@ import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 
 
-def plot_cell_spatial_scatter(strish_obj:STRISH_Obj , X_col:Optional[str]=None, Y_col:Optional[str]=None, 
+def plot_cell_spatial_scatter(strish_obj:STRISH_Obj ,
                                   label:Optional[str]=None, spot_size:Optional[float]=0.75, 
                                   linewidth:Optional[float]=1.0, color_mapper:Optional[dict]=None,
                                   legend_log=2,rasterize:Optional[bool]=True, save_fn:Optional[str]=None):
