@@ -5,7 +5,7 @@ import seaborn as sns
 from PIL import Image
 import glob
 import io
-
+from scipy.optimize import minimize
 
 def get_files_in_directory(directory, postfix=""):
     """ list all the files with postfix in the directory and return the sorted list """
@@ -53,6 +53,22 @@ def convert_micron2pixel(x_micron, micron_dim, scale_dim):
     oy_px_coord = convert_micron2pixel(oy_coords, 15235.53, im_demo.shape[0])
     """
     return x_micron*scale_dim/micron_dim
+
+def inverse_transform_point(xform, p):
+    """
+    Returns the inverse-transform of a point.
+
+    :param sitk.Transform xform: The transform to invert
+    :param (float,float)|[float|float]|np.ndarray p: The point to find inverse for
+    :return np.ndarray, bool: The point and whether the operation succeeded or not
+    """
+
+    def fun(x):
+        return np.linalg.norm(xform.TransformPoint(x) - p)
+
+    p = np.array(p)
+    res = minimize(fun, p, method='Powell')
+    return res.x, res.success
 
 
 def add_detection_boxes(list_annots, current_ox, current_oy, 
