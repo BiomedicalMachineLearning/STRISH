@@ -75,7 +75,6 @@ def count_window_ligand_receptor_score(merge_count_window:pd.DataFrame):
     #     print(sender, receiver)
     scores.reset_index(inplace=True)
 
-
 # target_lr = 'CSF1R_IL34'
 # background_table = scores.drop(columns=target_lr)
 # all_obs_windows = scores[[target_lr]].values
@@ -88,3 +87,20 @@ def count_window_ligand_receptor_score(merge_count_window:pd.DataFrame):
 #         print(row)
 #     scores.loc[index,'p95_'+target_lr] =  p_value
 #     scores.loc[index,'log10p_'+target_lr] =  -np.log10(p_value)
+
+
+def lr_significant_test(count_lr_df: pd.DataFrame, target_lr_pair: str):
+    # target_lr = 'CSF1R_IL34'
+    background_table = count_lr_df.drop(columns=target_lr_pair)
+    # extract the lr_score of all the windows that have positive mean of co-localization of target_lr_pair
+    all_obs_windows = count_lr_df[[target_lr_pair]].values
+    count_lr_df['p95_'+target_lr_pair] = 0.0
+    for index, row in background_table.iterrows():
+        # cumulative of randomized pair of ligand-receptor within the same window in count_lr_df
+        background_windows_row = row[1:].values
+        single_total = list(all_obs_windows) + list(background_windows_row)
+        p_value = sum(single_total >= count_lr_df.loc[index,target_lr_pair])/len(single_total)
+        count_lr_df.loc[index,'p95_'+target_lr_pair] = p_value
+        count_lr_df.loc[index,'log10p_'+target_lr_pair] = -np.log10(p_value)
+    return count_lr_df
+
