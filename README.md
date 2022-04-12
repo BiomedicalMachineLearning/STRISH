@@ -3,7 +3,7 @@
 
 STRISH is a package for detecting cells local coexpression of biomarkers within tissue using highly multiplex image as input. STRISH include quality assessment, preprocessing, cell colocalisation detection.
 
-1. Requirements:  
+## 1. Requirements:  
 
 ```
 pandas>=1.3.2
@@ -24,11 +24,11 @@ ipython>=7.26.0
 scanpy>=1.8
 [Others as specified in the requirements.txt file]
 ```
-2. Installation
+## 2. Installation
 
 ```pip install STRISH```
 
-3. Test Data
+## 3. Test Data
 
 ### <a href="https://zenodo.org/record/4391415#.YlUEX9PP1qs"> BCC/SCC STRISH dataset (Visium Spatial Transcriptomic and RNA-in situ hybridization RNAscope )</a> dataset
 
