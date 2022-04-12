@@ -1,4 +1,4 @@
-from core import STRISH_Obj
+from STRISH.core import STRISH_Obj
 from typing import Any, Union, Optional
 from skimage import io as sk_io
 from pathlib import Path
