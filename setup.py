@@ -33,9 +33,9 @@ setup(
     include_package_data=True,
     keywords="STRISH",
     name="STRISH",
-    packages=find_packages(include=["STRISH_test", "STRISH.*"]),
+    packages=find_packages(),
     setup_requires=setup_requirements,
-    url="https://github.com/minhtran1309/STRISH",
-    version="0.2.0",
+    url="https://github.com/BiomedicalMachineLearning/STRISH",
+    version="0.2.1",
     zip_safe=False,
 )
