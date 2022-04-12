@@ -3,6 +3,12 @@ from setuptools import setup, find_packages
 with open("requirements.txt") as f:
     requirements = f.read().splitlines()
 
+with open("HISTORY.rst") as history_file:
+    history = history_file.read()
+
+with open("README.md", encoding="utf8") as readme_file:
+    readme = readme_file.read()
+
 setup_requirements = []
 
 setup(
@@ -21,20 +27,15 @@ setup(
         "Programming Language :: Python :: 3.8",
     ],
     description="Spatial TRanscriptomic In Situ Hybridization (STRISH)",
-    entry_points={
-        "console_scripts": [
-            "stlmain",
-        ],
-    },
     install_requires=requirements,
     license="BSD license",
     long_description=readme + "\n\n" + history,
     include_package_data=True,
-    keywords="STRISH",
-    name="STRISH",
-    packages=find_packages(include=["STRISH", "STRISH.*"]),
+    keywords="STRISH_test",
+    name="STRISH_test",
+    packages=find_packages(include=["STRISH_test", "STRISH.*"]),
     setup_requires=setup_requirements,
-    url="https://github.com/BiomedicalMachineLearning/STRISH",
-    version="0.1",
+    url="https://github.com/minhtran1309/STRISH_test",
+    version="0.2.0",
     zip_safe=False,
 )
