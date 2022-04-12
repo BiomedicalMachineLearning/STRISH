@@ -32,7 +32,7 @@ setuptools>=52.0.0
 #### <a href="https://zenodo.org/record/4391415#.YlUEX9PP1qs"> BCC/SCC STRISH dataset (Visium Spatial Transcriptomic and RNA-in situ hybridization RNAscope )</a> dataset
 
 ## Usage
-a. Input data preprocessing. 
+a. Input data and quality control. 
 
 Read in cell segmentation and measurement. 
 
@@ -61,6 +61,16 @@ strish_plotting.plot_size_shape_histogram(my_strish_obj)
 
 strish_preprocessing.scan_cell_locs_by_window(my_strish_obj, max_cell_per_window=50, init_sub_w=0.5, init_sub_h=0.25)
 strish_plotting.plot_tissue_window_contour(my_strish_obj, extend_margin=3)
+
+# (optional) for the strich object which marker's expressions are not converted from flourescene ID to gene/protein name
+my_strish_obj.var_names = list(signal2rna_r1.values())
+
+# (optional) filter cells that are either too small or too large from data (more likely to be ) 
+strish_preprocessing.preprocess_filter_size_shape(strish_bcc_e15_s1, column= 'Nucleus: Area', lower=0.01,upper=0.95)
+
+# subset the marker of interest or remove the markers that are not used throughout the analysis (DAPI for nuclei should be removed) 
+marker_rna = ['CSF1R', 'IL34', 'THY1']
+filtered_strish_bcc_e15_s1 = filtered_strish_bcc_e15_s1[:,marker_rna]
 ```
 
 
